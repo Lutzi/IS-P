@@ -10,17 +10,22 @@ ask :-
     writeln('stell ne frage huso'),
     read_sentence(Frage),
     trim(Frag,Frage),
-    verarbeiten(Frag, Sem).
+    verarbeiten(Sem, Frag, []),
+    Final =.. Sem,
+    call(Final),
+    write('Ja, so ist das!').
     
     trim(Q,In) :- append(Q,['.'],In).
 
-verarbeiten --> entfrag.
-%High Level Shit
-entfrag --> ipe, en(Sem), np, prep, en(Sem), {call(Sem)}.
-%ergfrag -->.
+verarbeiten(Sem) --> entfrag(Sem).
 
-  %Basic Shit
-np --> art(N), nom(N, Sem).
+%High Level Shit
+
+entfrag(Sem) --> ipe, en(SemA), np(SemNP), prep, en(SemB),
+             {Sem = [SemNP,SemA,SemB]}.
+
+%Basic Shit
+np(Sem) --> art(N), nom(N, Sem).
 %np --> art(N), nom(N, Sem), ppp.
 %np --> en.
 
