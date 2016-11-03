@@ -10,15 +10,21 @@ ask :-
     writeln('stell ne frage huso'),
     read_sentence(Frage),
     trim(Frag,Frage),
-    verarbeiten(Sem, Frag, []),
-    Final =.. Sem,
-    call(Final),
-    write('Ja, er/sie ist der/die Vater/Mutter/Tochter/Sohn von ihm/ihr').
-    
-    trim(Q,In) :- append(Q,['.'],In).
+    verarbeiten(Sem, Frag, []).
 
-verarbeiten(Sem) --> entfrag(Sem).
-verarbeiten(Sem) --> ergfrag(Sem).
+    
+    
+trim(Q,In) :- append(Q,['.'],In).
+
+verarbeiten(Sem) --> entfrag(Sem),
+                 {Final =.. Sem},
+                 {call(Final)},
+                 {write('Ja, er/sie ist der/die Vater/Mutter/Tochter/Sohn von ihm/ihr')}.
+verarbeiten(Sem) --> ergfrag(Sem),
+                 {Term =.. Sem,
+                 call(Term),
+                 nth1(2, Sem, Elem),
+                 write('keine frage, du sprichst von '), write(Elem)}.
 
 %High Level Shit
 
