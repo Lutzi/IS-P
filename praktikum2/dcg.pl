@@ -14,7 +14,7 @@ ask :-
 
     
     
-trim(Q,In) :- append(Q,['.'],In).
+trim(Q,In) :- append(Q,['?'],In).
 
 verarbeiten(Sem) --> entfrag(Sem),
                  {Final =.. Sem},
@@ -28,20 +28,29 @@ verarbeiten(Sem) --> ergfrag(Sem),
 
 %High Level Shit
 
-entfrag(Sem) --> ipe, en(SemA), np(SemNP), prep, en(SemB),
-             {Sem = [SemNP,SemA,SemB]}.
-ergfrag(Sem) --> ip(SemIP), vp(SemVP), prep, en(SemA),
-             {Sem = [SemVP,SemIP,SemA]}.
-
+%entfrag(Sem) --> ipe, en(SemA), np(SemNP), prep, en(SemB),
+%             {Sem = [SemNP,SemA,SemB]}.
+%ergfrag(Sem) --> ip(SemIP), vp(SemVP), prep, en(SemA),
+%             {Sem = [SemVP,SemIP,SemA]}.
 %Basic Shit
-np(Sem) --> art(N), nom(N, Sem).
-%np --> art(N), nom(N, Sem), ppp.
-%np --> en.
+%np(Sem) --> art(N), nom(N, Sem).
+%ppp --> pp, np.
+%vp(Sem) --> verb, np(SemNP), {Sem = SemNP}.
 
-ppp --> pp, np.
+entfrag(Sem) --> ipe, en(SemA), np(SemNP),
+             {SemNP = [A|B], B = [C|D], Sem = [A, SemA, C]}.
 
-%vp --> v.
-vp(Sem) --> verb, np(SemNP), {Sem = SemNP}.
+np(Sem) --> en(Sem).
+np(Sem) --> art, nom(Sem).
+np(Sem) --> art, nom(SemN), pp(SemPP),
+        {Sem = [SemN,SemPP]}.
+
+pp(Sem) --> prep, np(Sem).
+
+vp(Sem) --> verb.
+vp(Sem) --> verb, np(SemNP),
+        {Sem = SemNP}.
+
 
 %Lexikonzugriff
 art(N)      --> [X], {lex(X,_,art,N)}.
