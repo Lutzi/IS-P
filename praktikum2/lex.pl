@@ -2,7 +2,7 @@
 % Datum: 20.10.2016
 
 % lex(wort,semantik,wortart,numerus)
-lex(wer,_,ip,_).
+lex(wer,X,ip,_).
 lex(ist,_,ipe,s).
 lex(sind,_,ipe,p).
 
