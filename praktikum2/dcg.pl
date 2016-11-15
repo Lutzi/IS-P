@@ -14,7 +14,7 @@ ask :-
 
     
     
-trim(Q,In) :- append(Q,['.'],In).
+trim(Q,In) :- append(Q,['?'],In).
 
 verarbeiten(Sem) --> entfrag(Sem),
                  {Final =.. Sem},
