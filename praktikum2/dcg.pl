@@ -7,10 +7,12 @@
 
 
 ask :-
-    writeln('stell ne frage huso'),
+    writeln('stell ne frage'),
     read_sentence(Frage),
     trim(Frag,Frage),
-    verarbeiten(Sem, Frag, []).
+    verarbeiten(Sem, Frag, []),
+    writeln(''),
+    ask.
 
 test :- findall(X, ist_schwester_von(X, schmutz),L),
      write(L).
@@ -33,33 +35,36 @@ verarbeiten(Sem) --> p_ergfrag(Sem),
                  nth1(2, Sem, X),
                  Term =.. Sem,
                  findall(X, Term,L),
-                 write(L)}.
+                 write('Das sind '),
+                 print_all(L)}.
 
+print_all([]).
+print_all([X|Rest]) :- write(X),write(' '), print_all(Rest).
 
 % Fragetypen
 
 % Ist Lutz der Vater von Schmutz?
-entfrag(Sem) --> ipe, en(SemA), np(SemNP),
+entfrag(Sem) --> ipe, en(SemA), np(SemNP, N),
              {SemNP = [A|B], B = [C|_], Sem = [A, SemA, C]}.  % so halb auf Verschachtelung ausgelegt, aber funktioniert dafür nicht...
 
 % Wer ist der Vater von Schmutz?
-ergfrag(Sem) --> ip(SemIP), vp(SemVP, s), pp(SemPP),
+ergfrag(Sem) --> ip(SemIP), vp(SemVP, s), pp(SemPP, N),
              {Sem = [SemVP,SemIP,SemPP]}.
              
 % Wer sind die Schwestern von Schmutz?
-p_ergfrag(Sem) --> ip(SemIP), vp(SemVP, p), pp(SemPP),
+p_ergfrag(Sem) --> ip(SemIP), vp(SemVP, p), pp(SemPP, N),
              {Sem = [SemVP,SemIP,SemPP]}.
 
 % Basic
-np(Sem) --> en(Sem).
-np(Sem) --> art(N), nom(N, Sem).
-np(Sem) --> art(N), nom(N, SemN), pp(SemPP),
+np(Sem, N) --> en(Sem).
+np(Sem, N) --> art(N), nom(N, Sem).
+np(Sem, N) --> art(N), nom(N, SemN), pp(SemPP, N),
         {Sem = [SemN,SemPP]}.
 
-pp(Sem) --> prep, np(Sem).
+pp(Sem, N) --> prep, np(Sem, N).
 
 vp(Sem, N) --> verb(N).
-vp(Sem, N) --> verb(N), np(SemNP),
+vp(Sem, N) --> verb(N), np(SemNP, N),
         {Sem = SemNP}.
 
 
