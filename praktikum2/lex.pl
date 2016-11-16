@@ -9,6 +9,7 @@ lex(sind,_,ipe,p).
 lex(ist,_,v,s).
 
 lex(schwester, ist_schwester_von, n, s).
+lex(schwestern, ist_schwester_von, n, p).
 lex(bruder, ist_bruder_von, n, s).
 lex(onkel, ist_onkel_von, n, s).
 lex(tante, ist_tante_von, n, s).

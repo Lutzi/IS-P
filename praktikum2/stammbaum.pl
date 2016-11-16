@@ -5,11 +5,16 @@
 
 maennlich(hugo). maennlich(amon). maennlich(lutz). maennlich(putz). maennlich(schmutz).
 maennlich(michael).
-weiblich(lily). weiblich(sebille). weiblich(swetlana). weiblich(stefana).
+weiblich(lily). weiblich(sebille). weiblich(swetlana). weiblich(stefana). weiblich(annika). weiblich(berta). weiblich(lola).
 
 ist_elter_von(lily,sebille).
 ist_elter_von(hugo,sebille).
 ist_elter_von(lutz,schmutz).
+ist_elter_von(lutz,berta).
+ist_elter_von(lutz,annika).
+ist_elter_von(lola,schmutz).
+ist_elter_von(lola,berta).
+ist_elter_von(lola,annika).
 ist_elter_von(hugo,lutz).
 ist_elter_von(hugo,putz).
 ist_elter_von(swetlana,lutz).
@@ -18,6 +23,7 @@ ist_elter_von(stefana,amon).
 ist_elter_von(putz,michael).
 
 ist_vater_von(X,Y):-maennlich(X),ist_elter_von(X,Y).
+ist_schwester_von(X,Y):-weiblich(X),ist_geschwister_von(X,Y).
 ist_mutter_von(X,Y):-weiblich(X),ist_elter_von(X,Y).
 ist_sohn_von(X,Y):-maennlich(X),ist_elter_von(Y,X).
 ist_tochter_von(X,Y):-weiblich(X),ist_elter_von(Y,X).
