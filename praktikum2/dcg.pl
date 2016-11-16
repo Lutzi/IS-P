@@ -43,11 +43,11 @@ entfrag(Sem) --> ipe, en(SemA), np(SemNP),
              {SemNP = [A|B], B = [C|_], Sem = [A, SemA, C]}.  % so halb auf Verschachtelung ausgelegt, aber funktioniert dafür nicht...
 
 % Wer ist der Vater von Schmutz?
-ergfrag(Sem) --> ip(SemIP), vp(SemVP), pp(SemPP),
+ergfrag(Sem) --> ip(SemIP), vp(SemVP, s), pp(SemPP),
              {Sem = [SemVP,SemIP,SemPP]}.
              
 % Wer sind die Schwestern von Schmutz?
-p_ergfrag(Sem) --> ip(SemIP), vp(SemVP), pp(SemPP),
+p_ergfrag(Sem) --> ip(SemIP), vp(SemVP, p), pp(SemPP),
              {Sem = [SemVP,SemIP,SemPP]}.
 
 % Basic
@@ -58,8 +58,8 @@ np(Sem) --> art(N), nom(N, SemN), pp(SemPP),
 
 pp(Sem) --> prep, np(Sem).
 
-vp(Sem) --> verb.
-vp(Sem) --> verb, np(SemNP),
+vp(Sem, N) --> verb(N).
+vp(Sem, N) --> verb(N), np(SemNP),
         {Sem = SemNP}.
 
 
@@ -68,7 +68,7 @@ art(N)      --> [X], {lex(X,_,art,N)}.
 nom(N, Sem) --> [X], {lex(X,Sem,n,N)}.
 ut          --> [X], {lex(X,_,ut,_)}.
 prep        --> [X], {lex(X,_,prep,_)}.
-verb        --> [X], {lex(X,_,v,_)}.
+verb(N)        --> [X], {lex(X,_,v,N)}.
 ip(Sem)        --> [X], {lex(X,Sem,ip,_)}.
 ipe        --> [X], {lex(X,_,ipe,_)}.
 en(Sem)        --> [X], {lex(X,Sem,name,_)}.
