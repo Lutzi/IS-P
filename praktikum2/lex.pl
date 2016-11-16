@@ -7,6 +7,7 @@ lex(ist,_,ipe,s).
 lex(sind,_,ipe,p).
 
 lex(ist,_,v,s).
+lex(sind,_,v,p).
 
 lex(schwester, ist_schwester_von, n, s).
 lex(schwestern, ist_schwester_von, n, p).

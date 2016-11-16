@@ -27,6 +27,16 @@ verarbeiten(Sem) --> ergfrag(Sem),
                  call(Term),
                  nth1(2, Sem, Elem),
                  write('keine frage, du sprichst von '), write(Elem)}.
+                 
+verarbeiten(Sem) --> p_ergfrag(Sem),
+                 {%write(Sem),
+                 nth1(2, Sem, X),
+                 Term =.. Sem,
+                 findall(X, Term,L),
+                 write(L)}.
+
+
+% Fragetypen
 
 % Ist Lutz der Vater von Schmutz?
 entfrag(Sem) --> ipe, en(SemA), np(SemNP),
