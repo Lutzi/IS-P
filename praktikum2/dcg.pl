@@ -24,13 +24,13 @@ verarbeiten(Sem) --> entfrag(Sem),
                  {Final =.. Sem},
                  {call(Final)},
                  {write('Ja, er/sie ist der/die Vater/Mutter/Tochter/Sohn von ihm/ihr')}.
-verarbeiten(Sem) --> ergfrag(Sem),
+verarbeiten(Sem) --> ergfrag(Sem, s),
                  {Term =.. Sem,
                  call(Term),
                  nth1(2, Sem, Elem),
                  write('keine frage, du sprichst von '), write(Elem)}.
                  
-verarbeiten(Sem) --> p_ergfrag(Sem),
+verarbeiten(Sem) --> ergfrag(Sem, p),
                  {%write(Sem),
                  nth1(2, Sem, X),
                  Term =.. Sem,
@@ -48,11 +48,8 @@ entfrag(Sem) --> ipe, en(SemA), np(SemNP, N),
              {SemNP = [A|B], B = [C|_], Sem = [A, SemA, C]}.  % so halb auf Verschachtelung ausgelegt, aber funktioniert dafür nicht...
 
 % Wer ist der Vater von Schmutz?
-ergfrag(Sem) --> ip(SemIP), vp(SemVP, s), pp(SemPP, N),
-             {Sem = [SemVP,SemIP,SemPP]}.
-             
 % Wer sind die Schwestern von Schmutz?
-p_ergfrag(Sem) --> ip(SemIP), vp(SemVP, p), pp(SemPP, N),
+ergfrag(Sem,N) --> ip(SemIP), vp(SemVP, N), pp(SemPP,_),
              {Sem = [SemVP,SemIP,SemPP]}.
 
 % Basic
