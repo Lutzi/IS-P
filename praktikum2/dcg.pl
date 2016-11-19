@@ -38,8 +38,8 @@ verarbeiten(Sem) --> ergfrag(Sem, p),
                  write('Das sind '),
                  print_all(L)}.
 
-print_all([]).
-print_all([X|Rest]) :- write(X),write(' '), print_all(Rest).
+print_all([A|[]]) :- write(A), write('.').
+print_all([X|Rest]) :- write(X),write(' und '), print_all(Rest).
 
 % Fragetypen
 
