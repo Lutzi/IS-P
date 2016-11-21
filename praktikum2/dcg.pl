@@ -20,10 +20,10 @@ test :- findall(X, ist_schwester_von(X, schmutz),L),
     
 trim(Q,In) :- append(Q,['?'],In).
 
-verarbeiten(Sem) --> entfrag(Sem),
+verarbeiten(Sem) --> entfrag(Sem, Art, Beziehung),
                  {Final =.. Sem},
                  {call(Final)},
-                 {write('Ja, er/sie ist der/die Vater/Mutter/Tochter/Sohn von ihm/ihr')}.
+                 {write('Ja, das ist '), write(Art), write(' '),write(Beziehung), write('.')}.
 verarbeiten(Sem) --> ergfrag(Sem, s),
                  {Term =.. Sem,
                  call(Term),
@@ -44,7 +44,7 @@ print_all([X|Rest]) :- write(X),write(' und '), print_all(Rest).
 % Fragetypen
 
 % Ist Lutz der Vater von Schmutz?
-entfrag(Sem) --> ipe, en(SemA), np(SemNP, N),
+entfrag(Sem, Art, Beziehung) --> ipe, en(SemA), np(SemNP, N, Art, Beziehung),
              {SemNP = [A|B], B = [C|_], Sem = [A, SemA, C]}.  % so halb auf Verschachtelung ausgelegt, aber funktioniert dafür nicht...
 
 % Wer ist der Vater von Schmutz?
@@ -53,21 +53,21 @@ ergfrag(Sem,N) --> ip(SemIP), vp(SemVP, N), pp(SemPP,_),
              {Sem = [SemVP,SemIP,SemPP]}.
 
 % Basic
-np(Sem, N) --> en(Sem).
-np(Sem, N) --> art(N), nom(N, Sem).
-np(Sem, N) --> art(N), nom(N, SemN), pp(SemPP, N),
+np(Sem, N, Art, Beziehung) --> en(Sem).
+np(Sem, N, Art, Beziehung) --> art(N, Art), nom(N, Sem, Beziehung).
+np(Sem, N, Art, Beziehung) --> art(N, Art), nom(N, SemN, Beziehung), pp(SemPP, N),
         {Sem = [SemN,SemPP]}.
 
-pp(Sem, N) --> prep, np(Sem, N).
+pp(Sem, N) --> prep, np(Sem, N, Art, Beziehung).
 
 vp(Sem, N) --> verb(N).
-vp(Sem, N) --> verb(N), np(SemNP, N),
+vp(Sem, N) --> verb(N), np(SemNP, N, Art, Beziehung),
         {Sem = SemNP}.
 
 
 %Lexikonzugriff
-art(N)      --> [X], {lex(X,_,art,N)}.
-nom(N, Sem) --> [X], {lex(X,Sem,n,N)}.
+art(N, X)      --> [X], {lex(X,_,art,N)}.
+nom(N, Sem, X) --> [X], {lex(X,Sem,n,N)}.
 ut          --> [X], {lex(X,_,ut,_)}.
 prep        --> [X], {lex(X,_,prep,_)}.
 verb(N)        --> [X], {lex(X,_,v,N)}.
