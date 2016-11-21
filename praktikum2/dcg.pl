@@ -39,7 +39,7 @@ verarbeiten --> entfrag(Sem, Art, Beziehung),
             %     nth1(2, Sem, GesuchtePerson),
                %  write('Keine Frage, du sprichst von '), writeln(GesuchtePerson)}.
                  
-verarbeiten --> ergfrag(Sem, _),
+verarbeiten --> ergfrag(Sem,_),
                  {nth1(2, Sem, X),
                  nth1(1, Sem, Verhaeltnis),
                  Term =.. Sem,
@@ -50,8 +50,8 @@ print_all([A|[]]) :- write(A), writeln('.').
 print_all([X|Rest]) :- write(X),write(' und '), print_all(Rest).
 
 ausgabe([],Verhaeltnis) :- write('Es wurde niemand gefunden.').
-ausgabe([A|[]],Verhaeltnis) :- write('Der/Die '), lex(Nomen,Verhaeltnis,n,s), write(Nomen), write(' ist '), writeln(A).
-ausgabe([A|B],Verhaeltnis) :- write('Die '), lex(Nomen,Verhaeltnis,n,p), write(Nomen), write(' sind '), X = [A|B], print_all(X).
+ausgabe([A|[]],Verhaeltnis) :- lex(Art,_,art,s,G),write(Art), write(' '), lex(Nomen,Verhaeltnis,n,s,G), write(Nomen), write(' ist '), writeln(A).
+ausgabe([A|B],Verhaeltnis) :- lex(Art,_,art,p,G),write(Art), write(' '), lex(Nomen,Verhaeltnis,n,p,G), write(Nomen), write(' sind '), X = [A|B], print_all(X).
 
 % Fragetypen
 
@@ -66,8 +66,8 @@ ergfrag(Sem,N) --> ip(SemIP), vp(SemVP, N), pp(SemPP,_),
 
 % Basic
 np(Sem, N, Art, Beziehung) --> en(Sem).
-np(Sem, N, Art, Beziehung) --> art(N, Art), nom(N, Sem, Beziehung).
-np(Sem, N, Art, Beziehung) --> art(N, Art), nom(N, SemN, Beziehung), pp(SemPP, N),
+np(Sem, N, Art, Beziehung) --> art(N, Art,_), nom(N, Sem, Beziehung,_).
+np(Sem, N, Art, Beziehung) --> art(N, Art,_), nom(N, SemN, Beziehung,_), pp(SemPP, N),
         {Sem = [SemN,SemPP]}.
 
 pp(Sem, N) --> prep, np(Sem, N, Art, Beziehung).
@@ -78,9 +78,9 @@ vp(Sem, N) --> verb(N), np(SemNP, N, Art, Beziehung),
 
 
 %Lexikonzugriff
-art(N, X)      --> [X], {lex(X,_,art,N)}.
-nom(N, Sem, X) --> [X], {lex(X,Sem,n,N)}.
-ut          --> [X], {lex(X,_,ut,_)}.
+art(N, X, G)      --> [X], {lex(X,_,art,N,G)}.
+nom(N, Sem, X, G) --> [X], {lex(X,Sem,n,N,G)}.
+%ut          --> [X], {lex(X,_,ut,_)}.
 prep        --> [X], {lex(X,_,prep,_)}.
 verb(N)        --> [X], {lex(X,_,v,N)}.
 ip(Sem)        --> [X], {lex(X,Sem,ip,_)}.
