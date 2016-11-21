@@ -10,35 +10,39 @@ ask :-
     writeln('stell ne frage'),
     read_sentence(Frage),
     trim(Frag,Frage),
-    verarbeiten(Sem, Frag, []),
+    verarbeiten(Frag, []),
     writeln(''),
     ask.
 
-test :- findall(X, ist_schwester_von(X, schmutz),L),
-     write(L).
+test :- Frage1 = [ist,lola,die,mutter,von,schmutz],
+     Frage2 = [wer,sind,die,schwestern,von,schmutz],
+     Frage3 = [wer,ist,der,vater,von,schmutz],
+     verarbeiten(Frage1,[]),
+     verarbeiten(Frage2,[]),
+     verarbeiten(Frage3,[]),
+     writeln('Tests erfolgreich, alles gut!').
     
     
 trim(Q,In) :- append(Q,['?'],In).
 
-verarbeiten(Sem) --> entfrag(Sem, Art, Beziehung),
+verarbeiten --> entfrag(Sem, Art, Beziehung),
                  {Final =.. Sem},
                  {call(Final)},
-                 {write('Ja, das ist '), write(Art), write(' '),write(Beziehung), write('.')}.
-verarbeiten(Sem) --> ergfrag(Sem, s),
+                 {write('Ja, das ist '), write(Art), write(' '),write(Beziehung), writeln('.')}.
+verarbeiten --> ergfrag(Sem, s),
                  {Term =.. Sem,
                  call(Term),
-                 nth1(2, Sem, Elem),
-                 write('keine frage, du sprichst von '), write(Elem)}.
+                 nth1(2, Sem, GesuchtePerson),
+                 write('Keine Frage, du sprichst von '), writeln(GesuchtePerson)}.
                  
-verarbeiten(Sem) --> ergfrag(Sem, p),
-                 {%write(Sem),
-                 nth1(2, Sem, X),
+verarbeiten --> ergfrag(Sem, p),
+                 {nth1(2, Sem, X),
                  Term =.. Sem,
                  findall(X, Term,L),
                  write('Das sind '),
                  print_all(L)}.
 
-print_all([A|[]]) :- write(A), write('.').
+print_all([A|[]]) :- write(A), writeln('.').
 print_all([X|Rest]) :- write(X),write(' und '), print_all(Rest).
 
 % Fragetypen
