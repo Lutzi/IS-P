@@ -10,9 +10,7 @@ ask :-
     writeln('stell ne frage'),
     read_sentence(Frage),
     trim(Frag,Frage),
-    verarbeiten(Frag, []),
-    writeln(''),
-    ask.
+    verarbeiten(Frag, []).
 
 test :- Frage1 = [ist,lola,die,mutter,von,schmutz],
      Frage2 = [wer,sind,die,schwestern,von,schmutz],
