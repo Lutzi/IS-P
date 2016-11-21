@@ -17,9 +17,13 @@ ask :-
 test :- Frage1 = [ist,lola,die,mutter,von,schmutz],
      Frage2 = [wer,sind,die,schwestern,von,schmutz],
      Frage3 = [wer,ist,der,vater,von,schmutz],
+     Frage4 = [wer,ist,der,bruder,von,sebille],
+     Frage5 = [wer,sind,die,brüder,von,sebille],
      verarbeiten(Frage1,[]),
      verarbeiten(Frage2,[]),
      verarbeiten(Frage3,[]),
+     verarbeiten(Frage4,[]),
+     verarbeiten(Frage5,[]),
      writeln('Tests erfolgreich, alles gut!').
     
     
@@ -29,21 +33,25 @@ verarbeiten --> entfrag(Sem, Art, Beziehung),
                  {Final =.. Sem},
                  {call(Final)},
                  {write('Ja, das ist '), write(Art), write(' '),write(Beziehung), writeln('.')}.
-verarbeiten --> ergfrag(Sem, s),
-                 {Term =.. Sem,
-                 call(Term),
-                 nth1(2, Sem, GesuchtePerson),
-                 write('Keine Frage, du sprichst von '), writeln(GesuchtePerson)}.
+%verarbeiten --> ergfrag(Sem, s),
+  %               {Term =.. Sem,
+     %            call(Term),
+            %     nth1(2, Sem, GesuchtePerson),
+               %  write('Keine Frage, du sprichst von '), writeln(GesuchtePerson)}.
                  
-verarbeiten --> ergfrag(Sem, p),
+verarbeiten --> ergfrag(Sem, _),
                  {nth1(2, Sem, X),
+                 nth1(1, Sem, Verhaeltnis),
                  Term =.. Sem,
                  findall(X, Term,L),
-                 write('Das sind '),
-                 print_all(L)}.
+                 ausgabe(L,Verhaeltnis)}.
 
 print_all([A|[]]) :- write(A), writeln('.').
 print_all([X|Rest]) :- write(X),write(' und '), print_all(Rest).
+
+ausgabe([],Verhaeltnis) :- write('Es wurde niemand gefunden.').
+ausgabe([A|[]],Verhaeltnis) :- write('Der/Die '), lex(Nomen,Verhaeltnis,n,s), write(Nomen), write(' ist '), writeln(A).
+ausgabe([A|B],Verhaeltnis) :- write('Die '), lex(Nomen,Verhaeltnis,n,p), write(Nomen), write(' sind '), X = [A|B], print_all(X).
 
 % Fragetypen
 

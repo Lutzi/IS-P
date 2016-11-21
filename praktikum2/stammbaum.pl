@@ -3,12 +3,14 @@
 
 :-consult('readsentence.pl').
 
-maennlich(hugo). maennlich(amon). maennlich(lutz). maennlich(putz). maennlich(schmutz).
+maennlich(hugo). maennlich(amon). maennlich(lutz). maennlich(putz). maennlich(schmutz). maennlich(bent).
 maennlich(michael).
 weiblich(lily). weiblich(sebille). weiblich(swetlana). weiblich(stefana). weiblich(annika). weiblich(berta). weiblich(lola).
 
 ist_elter_von(lily,sebille).
 ist_elter_von(hugo,sebille).
+ist_elter_von(lily,bent).
+ist_elter_von(hugo,bent).
 ist_elter_von(lutz,schmutz).
 ist_elter_von(lutz,berta).
 ist_elter_von(lutz,annika).
@@ -24,6 +26,7 @@ ist_elter_von(putz,michael).
 
 ist_vater_von(X,Y):-maennlich(X),ist_elter_von(X,Y).
 ist_schwester_von(X,Y):-weiblich(X),ist_geschwister_von(X,Y).
+ist_bruder_von(X,Y):-maennlich(X),ist_geschwister_von(X,Y).
 ist_mutter_von(X,Y):-weiblich(X),ist_elter_von(X,Y).
 ist_sohn_von(X,Y):-maennlich(X),ist_elter_von(Y,X).
 ist_tochter_von(X,Y):-weiblich(X),ist_elter_von(Y,X).
